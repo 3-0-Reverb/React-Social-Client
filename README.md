@@ -47,6 +47,7 @@ Reverb (styled as ReverB) is an upcoming social media app designed for Revature 
 - - DEVIATION: At this point, you need to checkout to the dev branch on React-Social-Client to run locally. (reverbClient.ts and Register.tsx)
 
 ### Setting up Firebase
+#### FrontEnd
 - We are using Firebase for authentication. User passwords are not stored in the database. Instead, Firebase handles password storage and token generation.
 - [Create a Firebase Account](https://firebase.google.com/)
 - Click on "Get Started"
@@ -54,17 +55,51 @@ Reverb (styled as ReverB) is an upcoming social media app designed for Revature 
 -- Enter project name
 -- Disable Google Analytics for this project
 -- Create Project
-![image](https://user-images.githubusercontent.com/62768384/163588607-efe08b83-f32f-414f-ae16-a04e4cd08192.png)
+-- Add a web app to your project
+![image](https://user-images.githubusercontent.com/62768384/163589057-8c14019c-6510-4edd-89b0-1c51b3ea946a.png)
+-- Name your project (eg: reverb-client)
+-- Register your app
+---- Uncheck Firebase Hosting
+---- Copy these lines and replace them in the firebase.ts file inside React-Social-Client
+![image](https://user-images.githubusercontent.com/62768384/163589649-da9bdda2-64e4-4b78-bb95-db63366b7634.png)
+---- Make sure git does not track this file because these configurations can be compromised if they are uploaded to GitHub.
+---- run "npm install firebase" to add this dependency to your front-end project
 
-- Enter the your firebase project’s web app’s settings and copy the configuration properties into the front end’s firebase.ts file.
-- In the same settings, on the Service Provider tab, click on Generate new private key. Copy the contents of that key into the backend’s firebase_config.json file.
-- In backend/src/main/resources, edit the applications.property file to have the correct spring.datasource parameters to the desired database.
+#### Backend
+- Now you must connect your Backend with the Firebase account
+- Click on the "gear icon"
+![image](https://user-images.githubusercontent.com/62768384/163590105-477f3bb0-e90f-4b20-8d54-c38aeeecf28c.png)
+- Go to the "Service accounts" tab
+- Click on the "Java" radio button
+- Click on "Generate new private key"
+- A JSON file will be downloaded. This file contains configurations that connect your Backend to the firebase.
+-- This file will go inside the "resources" folder in the "React-Social-Server" and rename it -- "firebase_config.json"
+-- Make sure git does not track this file. You don't want this file to be exposed to the internet
+
+- Configuring your dependencies
+-- You need 2 more files inside the resources folder to fully connect this application to all its dependencies (make sure git is not tracking these files):
+---- application-dev.properties - This file will connect you to your local database for local development.
+  - - spring.datasource.url=jdbc:postgresql://localhost:5432/postgres?currentSchema=<<your_schema_name>>
+  - - spring.datasource.username=<<db-username-here>>
+  - - spring.datasource.password=<<db-password-here>>
+  - - spring.datasource.driver-class-name=org.postgresql.Driver
+  - - spring.datasource.initialization-mode=never
+
+---- application-s3.properties - This file will connect you to an S3 bucket that will run the API withouw AWS related errors
+  - - amazonProperties.endpointUrl=<<s3-bucket-url>>
+  - - amazonProperties.bucketName=<<bucket-name-here>>
+  - - amazonProperties.accessKey=<<bucket-access-key-here>>
+  - - amazonProperties.secretKey=<<bucket-secret-key-here>>
+  
+#### Starting the API
 - Run Maven Update either within an IDE (having imported the backend as a Maven project) or using the following command in the backend directory:
 - - mvn clean install -U
 - Start the backend as a Spring Boot Application within an IDE or using the following command in the backend directory:
 - - mvn spring-boot:run
 - Install frontend dependencies using the command:
 - - npm install --legacy-peer-deps
+  
+#### Setting up the S3 bucket
 - Setup an s3 bucket for profile picture uploads.
 - - Create a user with the Add user feature of IAM
 - - Check the user's Access type 'Programatic access'
@@ -77,10 +112,9 @@ Reverb (styled as ReverB) is an upcoming social media app designed for Revature 
 - - endpointURL , accessKey , secretKey , and bucketName
 - Follow either Local or AWS Deployment instructions.
 
-# Local
+#### Local
 
-- Switch to the dev branch of the client and server using the following command:
-- - git checkout dev
+- Switch to the dev branch of the React-Social-Client and the main server using the following command:
 - Run the following comamnd in the directory of the server to install your dependencies.
 - - mvn clean install -U
 - Start the server using the following command in the server directory.
@@ -88,7 +122,7 @@ Reverb (styled as ReverB) is an upcoming social media app designed for Revature 
 - Launch the client using the following command inside of the client's directory.
 - - npm start
 
-# AWS Deployment
+### AWS Deployment
 
 - Backend
 - Setup an Elastic Beanstalk that uses Coretto 8 that will take our jar file and deploy it to an EC2 automatically.
