@@ -5,29 +5,7 @@ import SearchResult from '../search/SearchResult';
 import Group from './Group';
 
 export default function GoodResultGroup({ results }: {results: SearchResult[]}) {
-  const [groups, setGroups] = useState<[Group] | []>();
-
-  useEffect(() => { 
-    const createGroups = async () => {
-      const groupsArr: [Group] | [] = [];
-      
-      for (let i = 0; i < results.length; i++) {
-        const group = {key: '', label: '', profilePic: ''};
-        
-        group.key = results[i].key;
-        group.label = results[i].label;
-
-        const resp = await reverbClientWithAuth.get(`/api/group/${results[i].label}`);
-        group.profilePic = resp.data.profilePic;
-
-        groupsArr.push(group as never);
-      }
-
-      setGroups(groupsArr);
-    }
-    
-    createGroups();
-  }, []);
+  const [groups, setGroups] = useState<Group[]>([]);
 
   const handleClick = (e: SyntheticEvent) => {
     const target = e.target as HTMLButtonElement;
@@ -39,6 +17,29 @@ export default function GoodResultGroup({ results }: {results: SearchResult[]}) 
   const followGroup = async (label: string) => {
     reverbClientWithAuth.put(`/api/group/join/${label}`);
   }
+
+  useEffect(() => { 
+    const createGroups = async () => {
+      const groupsArr: Group[] = [];
+      
+      for (let i = 0; i < results.length; i++) {
+        const group = {key: '', label: '', profilePic: ''};
+        
+        group.key = results[i].key;
+        group.label = results[i].label;
+
+        const resp = await reverbClientWithAuth.get(`/api/group/${results[i].label}`);
+        group.profilePic = resp.data.profilePic;
+
+        groupsArr.push(group as Group);
+      }
+
+      setGroups(groupsArr.slice(0,9));
+    }
+    
+    console.log(results);
+    createGroups();
+  }, [results]);
 
   return (
     <>

@@ -5,7 +5,7 @@ import ResultsListGroup from './ResultsListGroup';
 
 export default function SearchBarGroup() {
   const [input, setInput] = useState("");
-  const [initialResults, setInitialResults] = useState<SearchResult[]>([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
 
   // Queries the DB only when the first character is typed into search bar. The results are then stored in initialResults (for further filtering) until the search bar is cleared (by backspacing, for instance)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +24,7 @@ export default function SearchBarGroup() {
             console.log(resp.data);
           }
 
-          setInitialResults(resp.data.responses);
+          setResults(resp.data.responses);
         })
         .catch(err => console.log(err));
     }
@@ -39,7 +39,7 @@ export default function SearchBarGroup() {
         value={input}
         onChange={handleChange}
       />
-      {input && <ResultsListGroup results={initialResults.slice(0, 8)}/>}
+      {input && <ResultsListGroup results={results}/>}
     </div>
   );
 }
