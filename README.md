@@ -39,13 +39,23 @@ Reverb (styled as ReverB) is an upcoming social media app designed for Revature 
 ## Getting Started
 
 - Install JDK 8, Maven, Git, and NPM.
-- Create a firebase account, and a new firebase project, with no Google Analytics.
-- Enable email/password as sign in provider.
-- Add a web app to the firebase project.
+
+### Repository Clone
 - Clone the frontend and backend using the following commands:
 - - git clone https://github.com/Revature-Reverb-2/React-Social-Client
 - - git clone https://github.com/Revature-Reverb-2/React-Social-Server
-- - DEVIATION: At this point, you need to checkout to the dev branch to run locally. Otherwise, you'll need to launch to an elastic beanstalk
+- - DEVIATION: At this point, you need to checkout to the dev branch on React-Social-Client to run locally. (reverbClient.ts and Register.tsx)
+
+### Setting up Firebase
+- We are using Firebase for authentication. User passwords are not stored in the database. Instead, Firebase handles password storage and token generation.
+- [Create a Firebase Account](https://firebase.google.com/)
+- Click on "Get Started"
+- Add a project
+-- Enter project name
+-- Disable Google Analytics for this project
+-- Create Project
+![image](https://user-images.githubusercontent.com/62768384/163588607-efe08b83-f32f-414f-ae16-a04e4cd08192.png)
+
 - Enter the your firebase project’s web app’s settings and copy the configuration properties into the front end’s firebase.ts file.
 - In the same settings, on the Service Provider tab, click on Generate new private key. Copy the contents of that key into the backend’s firebase_config.json file.
 - In backend/src/main/resources, edit the applications.property file to have the correct spring.datasource parameters to the desired database.
