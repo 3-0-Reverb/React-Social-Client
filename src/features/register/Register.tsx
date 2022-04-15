@@ -18,8 +18,8 @@ export default function Register() {
 
 
 
-  // const url = 'http://reverb-eb-env.eba-havvpanq.us-east-2.elasticbeanstalk.com/api/user/register';
-  const url = 'http://localhost:5000/api/user/register';
+   const url = 'http://reverb-eb-env.eba-havvpanq.us-east-2.elasticbeanstalk.com/api/user/register';
+  // const url = 'http://localhost:5000/api/user/register';
 
 
     const header = {
